@@ -6,7 +6,8 @@ import AxiosInsertForm from './AxiosInsertForm';
 
 class App extends Component{
 	state = {
-		postData : []
+		postData : [],
+		isAxiosInsert: true //For see axios Get data please make it false.
 	};
 	componentDidMount(){
 		axios.get('https://jsonplaceholder.typicode.com/posts')
@@ -14,26 +15,38 @@ class App extends Component{
 			this.setState({
 				postData : response.data
 			})
+			
 		})
 		.catch(error => console.log(error))
 	}
 
   render(){
-	//   let {postData} = this.state;
-	//   if (postData.length < 0) {
-	// 	return <h1 style={{textAlign: "center"}}> Data Loading... </h1>
-	//   } else {
-	// 	return (
-	// 		<div className="container">
-	// 			<InsertForm/>
-	// 		</div>
-	// 	)
-	//   }
-	  return(
-		  <div className="container">
-			  <AxiosInsertForm/>
-		  </div>
-	  )
+	  let {postData} = this.state;
+	  if (this.state.isAxiosInsert) {
+		return(
+			<div className="container">
+				<AxiosInsertForm/>
+			</div>
+		)
+	  } else {
+		  if (postData.length < 0) {
+			return <h1 style={{textAlign: "center"}}> Data Loading... </h1>
+		  } else {
+			return (
+				<div className="container">
+					<div className="row">
+						<div className="col-md-6">
+							{ postData.map(data => <li id={data.id} className="list-group">{data.title} </li>) }
+						</div>
+						<div className="col-md-6">
+							<InsertForm/>
+						</div>
+					</div>
+				</div>
+			)
+		  }
+	  }
+	  
 
   }
 }
